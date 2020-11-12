@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Message from './components/Message/Message'
+import Post from './components/Post/Post'
 
-function App() {
+function App(){
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js and use it</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Post content="Первый пост" />
+    <Post content="Второй пост" />
+    <Post content="Третий пост" />
+    <Message text="Первое сообщение" />
+    <Message text="Второе сообщение" />
+    <Message text="Третье сообщение" />
     </div>
   );
 }
 
-export default App;
+export default App
