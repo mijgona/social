@@ -5,7 +5,7 @@ import Tags from '../Tags/Tags';
 
 
 
-function Post({post, onLike, onRemove, onShow, onHide}) {
+function Post({post, onLike, onRemove, onShow, onHide, onEdit}) {
     const {author}=post;
     const {photo}=post;
     const {tags}=post;
@@ -23,6 +23,9 @@ function Post({post, onLike, onRemove, onShow, onHide}) {
     }    
     const handlePostHide =(evt)=>{
         onHide(post.id);
+    }  
+    const handlePostEdit =(evt)=>{
+        onEdit(post.id);
     }
 
     if (!post.hidden){
@@ -33,6 +36,7 @@ function Post({post, onLike, onRemove, onShow, onHide}) {
                 <h5>{author.name}</h5>
                 <button onClick={handlePostRemove}>удалить</button>
                 <button onClick={handlePostHide}>скрыть</button>
+                <button onClick={handlePostEdit}>изменить</button>
                 <div>{post.created}</div>
                 {post.hit && <span>HIT</span>}
             </header>
