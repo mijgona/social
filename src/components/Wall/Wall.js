@@ -19,6 +19,7 @@ function Wall() {
         hit: true,
         likes: 222,
         likedByMe: true,
+        hidden: true,
         tags: ['deadline','homework'],
         created: 160377800,
       },
@@ -36,7 +37,8 @@ function Wall() {
         },
         hit: true,
         likes: 10,
-        likedByMe: false,
+        likedByMe: false,        
+        hidden: false,
         created: 1603501200,
       },
     ])
@@ -50,13 +52,38 @@ function Wall() {
       return {...o,likedByMe, likes};
     }));
     };
+
+    const handlePostShow=(id)=>{
+      setPosts((prevState)=>prevState.map(o=>{
+      if (o.hidden){
+        if (o.id===id){
+          const hidden=!o.hidden;
+          return {...o,hidden};
+        }
+      }
+      return o;
+    }));
+    };    
+    
+    const handlePostHide=(id)=>{
+      setPosts((prevState)=>prevState.map(o=>{
+      if (!o.hidden){
+        if (o.id===id){
+          const hidden=!o.hidden;
+          return {...o,hidden};
+        }
+      }
+      return o;
+    }));
+    };
+
     const handlePostRemove=(id)=>{
     setPosts((prevState)=> prevState.filter(o => o.id !== id))
     }
-
+    
     return (
         <div>
-            {posts.map(o =>  <Post key={o.id} post={o} onLike={handlePostLike} onRemove={handlePostRemove}/>)}
+            {posts.map(o =>  <Post key={o.id} post={o} onLike={handlePostLike} onRemove={handlePostRemove} onShow={handlePostShow} onHide={handlePostHide}/>)}
         </div>
     )
 }

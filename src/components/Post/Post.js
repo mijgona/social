@@ -5,7 +5,7 @@ import Tags from '../Tags/Tags';
 
 
 
-function Post({post, onLike, onRemove}) {
+function Post({post, onLike, onRemove, onShow, onHide}) {
     const {author}=post;
     const {photo}=post;
     const {tags}=post;
@@ -17,12 +17,22 @@ function Post({post, onLike, onRemove}) {
     const handlePostRemove =(evt)=>{
         onRemove(post.id);
     }
+
+    const handlePostShow =(evt)=>{
+        onShow(post.id);
+    }    
+    const handlePostHide =(evt)=>{
+        onHide(post.id);
+    }
+
+    if (!post.hidden){
     return (
         <article>
             <header>
                 <img src={author.avatar} className="Post-avatar" width="50" height="50" alt={author.name}/>
                 <h5>{author.name}</h5>
                 <button onClick={handlePostRemove}>удалить</button>
+                <button onClick={handlePostHide}>скрыть</button>
                 <div>{post.created}</div>
                 {post.hit && <span>HIT</span>}
             </header>
@@ -43,7 +53,17 @@ function Post({post, onLike, onRemove}) {
                 </span> 
             </footer>        
         </article>
+    )}
+    return (
+        <article>
+            <header>
+                <img src={author.avatar} className="Post-avatar" width="50" height="50" alt={author.name}/>
+                <h5>{author.name}</h5>
+                <button onClick={handlePostShow}>показать</button>
+            </header>
+        </article>
     )
+
 }
 
 export default Post
