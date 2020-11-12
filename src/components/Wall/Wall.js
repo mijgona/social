@@ -43,6 +43,11 @@ function Wall() {
         created: 1603501200,
       },
     ])
+    
+    const[edited, setEdited]=useState();
+
+
+
     const handlePostLike=(id)=>{
       setPosts((prevState)=>prevState.map(o=>{
       if (o.id!==id){
@@ -83,12 +88,35 @@ function Wall() {
     }
     
     const handleSave = (post)=>{
+      if (edited!==undefined){
+        setPosts((prevState)=> prevState.map((o) => {
+          if (o.id!==post.id){
+            return o;
+          }
+          return {...post};
+        }))
+        setEdited(undefined);
+        return;
+      }
       setPosts((prevState)=> [ {...post}, ...prevState])
+      setEdited(undefined);
     };
 
+    const handlePostEdit=(id)=>{
+      const post=posts.find(o=>o.id===id);
+      if(post===undefined){
+        return;
+      }
+      setEdited(post);
+    };
+
+    const handlePostCancel=()=>{
+        setEdited(undefined);
+    };
+    
     return (
       <>
-        <PostForm onSave={handleSave} />
+        <PostForm edited={edited} onSave={handleSave} onCancel={handlePostCancel} />
         <div>
             {posts.map(o =>   <Post 
                               key={o.id} 
@@ -98,6 +126,8 @@ function Wall() {
                               onShow={handlePostShow} 
                               onHide={handlePostHide}
                               onSave={handleSave}
+                              onEdit={handlePostEdit}
+                              onCancel={handlePostCancel}
                               />)}
         </div>      
       </>
