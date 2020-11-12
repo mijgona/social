@@ -1,8 +1,13 @@
 import React from 'react';
 import './Post.css';
+import '../Tags/Tags';
+import Tags from '../Tags/Tags';
+
 
 function Post({post}) {
     const {author}=post;
+    const {photo}=post;
+    const {tags}=post;
     return (
         <article>
             <header>
@@ -13,13 +18,14 @@ function Post({post}) {
             </header>
             <div>
                 <div className='Post-content'>{post.content}</div>
-                <img src={post.photo} alt='photo' className='Post-photo' />
+                {photo &&  <img src={photo.url} alt={photo.alt} className='Post-photo' />}
             </div>
             <footer>
                 <span className='Post-likes'>
-                    {post.likedByMe ? <img src='https://lms.openjs.io/liked.svg' width='20' height='20'/> : <img src='https://lms.openjs.io/unliked.svg' width='20' height='20'/>}
+                    {post.likedByMe ? <img src='https://lms.openjs.io/liked.svg' width='20' height='20' alt='likes'/> : <img src='https://lms.openjs.io/unliked.svg' width='20' height='20' alt='likes'/>}
                     <span className='Post-likes-count'>{post.likes}</span>
-                </span>
+                    {tags && <Tags key={tags} tags={tags}/>}
+                </span> 
             </footer>        
         </article>
     )
