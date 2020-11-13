@@ -1,13 +1,14 @@
-import React, {useRef, useContext } from 'react'
+import React, {useRef} from 'react'
 import {    editSubmit,
             editChange,
             editCancel
             } from '../../store/actions';
-import PostsContext from '../../contexts/PostsContext';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 
 export default function PostForm() {
-   const {state: {edited}, dispatch} = useContext(PostsContext);
+    const dispatch=useDispatch();
+    const edited = useSelector((state)=>state.edited, shallowEqual);
    const firstFocusEl=useRef(null);//начальное значение
 
  
