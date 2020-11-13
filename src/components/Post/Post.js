@@ -1,31 +1,36 @@
-import React from 'react'; 
+import React, { useContext } from 'react'; 
 
 import './Post.css';
 import Tags from '../Tags/Tags';
+import PostsContext from '../../contexts/PostsContext';
+import {edit, hide,show,like,remove} from '../../store/actions';
 
 
 
-function Post({post, onLike, onRemove, onShow, onHide, onEdit}) {
+function Post({post}) {
     const {author}=post;
     const {photo}=post;
     const {tags}=post;
 
-    const handleLike = (evt)=>{
-        onLike(post.id);
+    const {dispatch }=useContext(PostsContext);
+
+    const handleLike = ()=>{
+        dispatch(like(post.id));
     };
 
-    const handlePostRemove =(evt)=>{
-        onRemove(post.id);
+    const handlePostRemove =(evt)=>{        
+        dispatch(remove(post.id));
+        //remove(post.id);
     }
 
-    const handlePostShow =(evt)=>{
-        onShow(post.id);
+    const handlePostShow =(evt)=>{        
+        dispatch(show(post.id));
     }    
-    const handlePostHide =(evt)=>{
-        onHide(post.id);
+    const handlePostHide =(evt)=>{        
+        dispatch(hide(post.id));
     }  
-    const handlePostEdit =(evt)=>{
-        onEdit(post.id);
+    const handlePostEdit =(evt)=>{        
+        dispatch(edit(post.id));
     }
 
     if (!post.hidden){

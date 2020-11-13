@@ -1,109 +1,66 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {useRef, useContext } from 'react'
+import {    editSubmit,
+            editChange,
+            editCancel
+            } from '../../store/actions';
+import PostsContext from '../../contexts/PostsContext';
 
-const empty={
-    id: 0,//генерируем ИД из даты
-    author: {
-      avatar:'https://lms.openjs.io/logo_js.svg',
-      name: 'OpenJS',
-    },
-    content: '',
-    photo: {
-        alt: '',
-        url:'',
-    },
-    hit: false,
-    likes: 0,
-    likedByMe: false,
-    hidden: true,
-    tags: null,
-    created: 0,
-};
 
-export default function PostForm({edited=empty, onSave, onCancel}) {
-   const [post, setPost] = useState(edited);
+export default function PostForm() {
+   const {state: {edited}, dispatch} = useContext(PostsContext);
    const firstFocusEl=useRef(null);//начальное значение
 
-    useEffect(() => {
-        setPost(edited);
-    }, [edited])
+ 
+  // useEffect(() => {
+   //     setPost(post);
+    //}, [post]);
+    
     const handleSubmit=(ev)=>{
         ev.preventDefault();
-        const parsed=post.tags?.map(o=>o.replace('#','')).filter(o=>o.trim()!=='')||[];
-        const tags=parsed.length!==0?parsed :null;
-        onSave({
-            ...post, 
-            id: post.id||Date.now(), 
-            created: post.created|| Date.now(), 
-            tags, 
-            photo: post.photo?.url ? {alt: '', ...post.photo}: null
-        });
-        setPost(empty);
+        dispatch(editSubmit());
+        //submit();
         firstFocusEl.current.focus();
     };
-
     const handleChange = (ev)=>{
-        let {name, value}=ev.target;
-        if (name==='tags'){
-            const parsed =value.split(' ');
-            setPost((prevState)=>({...prevState, [name]: parsed}));
-            return;
-        }
-        if (name==='alt') {
-            var url=""
-            post.photo.url ? url=post.photo.url:url=""           
-            post.photo={ 
-                url: url,
-                alt: value,
-            };
-            setPost((prevState)=> ({...prevState, photo : post.photo}))
-        };
-        if (name==="photo"){
-            var alt="";
-            post.photo.alt?alt=post.photo.alt:alt=""           
-            post.photo={ 
-                url: value,
-                alt: alt,
-            };
-            setPost((prevState)=> ({...prevState, photo : post.photo}))
-        }
-        if (name==="content"){
-            setPost((prevState)=> ({...prevState, content : value}))
-        }
+        const {name, value}=ev.target;
+        dispatch(editChange(name, value))
+        //dispatch ({type:'POST_EDIT_CHANGE', payload: {name, value}});
+        //change({name,value});
     };
     
-    const handleCancel =(evt)=>{        
-        setPost(empty);
+    const handleReset =(evt)=>{
         firstFocusEl.current.focus();
-        onCancel();
-    }
+        dispatch(editCancel())
+        //cancel();
+    };
 
     return (
         <form>
              <textarea 
                 ref={firstFocusEl} 
                 name='content' 
-                value={post.content || ''} 
+                value={edited.content || ''} 
                 onChange={handleChange}
              />
              <input name="tags" 
                 placeholder="tags" 
-                value={post.tags?.join(' ') || ''} 
+                value={edited.tags?.join(' ') || ''} 
                 onChange={handleChange}
              />
              <input 
                 name="photo" 
                 placeholder="photo" 
-                value={(post.photo&&post.photo.url)||''}
+                value={(edited.photo&&edited.photo.url)||''}
                 onChange={handleChange}
              />
              <input 
                 name="alt" 
-                value={(post.photo&&post.photo.alt)||''}
+                value={(edited.photo&&edited.photo.alt)||''}
                 placeholder="alt" 
                 onChange={handleChange}
              />
              <button onClick={handleSubmit}>Ok</button>
-             {edited!==empty && <button onClick={handleCancel}>Отменить</button>}
+             {edited?.id!==0 && <button onClick={handleReset}>Отменить</button>}
         </form>
     )
 }
