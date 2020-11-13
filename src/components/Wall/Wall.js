@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
-import PostsContext from '../../contexts/PostsContext';
-import Post from '../Post/Post'
+import React from 'react';
+import { useSelector,shallowEqual } from 'react-redux';
+import Post from '../Post/Post';
 import PostForm from '../PostForm/PostForm';
 
 function Wall(props) {
 
-    const {state:{posts}}=useContext(PostsContext);
+    const posts=useSelector((state)=>state.posts, shallowEqual)
    
     return (
       <>
